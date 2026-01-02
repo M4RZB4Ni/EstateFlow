@@ -1,0 +1,54 @@
+package io.github.m4rzb4ni.feature_property.ui
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.m4rzb4ni.domain.usecase.GetPropertiesUseCase
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+
+
+@HiltViewModel
+class PropertyListViewModel(
+    private val getPropertiesUseCase: GetPropertiesUseCase
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(PropertyListState())
+    val uiState: StateFlow<PropertyListState> = _uiState
+
+    private val _eventFlow = MutableSharedFlow<PropertyListEvent>()
+    val eventFlow: SharedFlow<PropertyListEvent> = _eventFlow
+
+
+    init {
+        loadProperties()
+    }
+
+    private fun loadProperties() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                isLoading = true
+            )
+            try {
+                val properties = getPropertiesUseCase()
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    properties = properties
+                )
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = e.message
+                )
+            }
+        }
+    }
+
+    fun onPropertyClick(propertyId: String) {
+        viewModelScope.launch {
+            _eventFlow.emit(PropertyListEvent.NavigationToDetail(propertyId))
+        }
+    }
+}
