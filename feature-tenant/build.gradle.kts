@@ -2,9 +2,9 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
 }
 
-@Suppress("UnstableApiUsage")
 android {
     namespace = "io.github.m4rzb4ni.feature_tenant"
     compileSdk {
@@ -40,6 +40,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+    implementation("com.google.dagger:hilt-android:2.57")
+    ksp("com.google.dagger:hilt-android-compiler:2.57.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
