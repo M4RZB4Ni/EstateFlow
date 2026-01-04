@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetPropertiesUseCase @Inject constructor(
     private val propertyRepository: PropertyRepository
 ) {
-    suspend operator fun invoke(): List<Property> {
+    suspend operator fun invoke(): Result<List<Property>> {
         return propertyRepository.getProperties()
     }
 }
