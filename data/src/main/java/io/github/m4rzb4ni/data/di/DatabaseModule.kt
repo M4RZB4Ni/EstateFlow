@@ -14,16 +14,21 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
+    private const val DATABASE_NAME = "estateflow.db"
+
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            "estateflow_db"
+            context = context,
+            klass = AppDatabase::class.java,
+            name = DATABASE_NAME
         ).build()
     }
 
     @Provides
-    fun providePropertyDao(db: AppDatabase): PropertyDao = db.propertyDao()
+    @Singleton
+    fun providePropertyDao(database: AppDatabase): PropertyDao {
+        return database.propertyDao()
+    }
 }
