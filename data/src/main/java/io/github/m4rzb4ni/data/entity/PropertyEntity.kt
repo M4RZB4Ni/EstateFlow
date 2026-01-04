@@ -1,5 +1,6 @@
 package io.github.m4rzb4ni.data.entity
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDate
@@ -8,7 +9,7 @@ import java.time.LocalDate
 data class PropertyEntity(
     @PrimaryKey val id: String,
     val name: String,
-    val address: String,
+    @Embedded val address: AddressEntity,
     val type: String,
     val sizeInSqm: Float,
     val numberOfRooms: Int,
