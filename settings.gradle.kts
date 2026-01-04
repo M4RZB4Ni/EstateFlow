@@ -23,6 +23,6 @@ rootProject.name = "EstateFlow"
 include(":app")
 include(":core")
 include(":domain")
-include(":feature-tenant")
-include(":feature-property")
+include(":feature:tenant")
+include(":feature:property")
 include(":data")

@@ -46,8 +46,9 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":domain"))
-    implementation(project(":feature-tenant"))
-    implementation(project(":feature-property"))
+    implementation(project(":data"))
+    implementation(project(":feature:tenant"))
+    implementation(project(":feature:property"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)

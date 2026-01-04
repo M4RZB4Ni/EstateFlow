@@ -3,16 +3,18 @@ package io.github.m4rzb4ni.feature_property.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.m4rzb4ni.domain.model.Property
 import io.github.m4rzb4ni.domain.usecase.GetPropertiesUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @HiltViewModel
-class PropertyListViewModel(
+class PropertyListViewModel @Inject constructor(
     private val getPropertiesUseCase: GetPropertiesUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PropertyListState())
@@ -28,22 +30,30 @@ class PropertyListViewModel(
 
     private fun loadProperties() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(
-                isLoading = true
+            updateState(isLoading = true)
+            val properties = getPropertiesUseCase()
+            properties.fold(
+                onSuccess = { properties ->
+                    updateState(properties = properties)
+                },
+                onFailure = { exception ->
+                    updateState(error = exception.message)
+                }
             )
-            try {
-                val properties = getPropertiesUseCase()
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    properties = properties
-                )
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    error = e.message
-                )
-            }
+
         }
+    }
+
+    private fun updateState(
+        isLoading: Boolean = false,
+        properties: List<Property> = emptyList(),
+        error: String? = null
+    ) {
+        _uiState.value = _uiState.value.copy(
+            isLoading = isLoading,
+            properties = properties,
+            error = error
+        )
     }
 
     fun onPropertyClick(propertyId: String) {
