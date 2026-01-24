@@ -1,4 +1,4 @@
-package io.github.m4rzb4ni.feature_property.ui
+package io.github.m4rzb4ni.feature_property.ui.property_list
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
@@ -18,13 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.m4rzb4ni.feature_property.ui.component.PropertyItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PropertyListScreen(
-    viewModel: PropertyListViewModel,
+    viewModel: PropertyListViewModel = hiltViewModel(),
     onNavigateToDetails: (String) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

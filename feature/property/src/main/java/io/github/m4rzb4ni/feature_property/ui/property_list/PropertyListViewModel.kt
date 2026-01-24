@@ -1,4 +1,4 @@
-package io.github.m4rzb4ni.feature_property.ui
+package io.github.m4rzb4ni.feature_property.ui.property_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
